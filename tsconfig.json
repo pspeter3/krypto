@@ -11,6 +11,7 @@
     "noUnusedParameters": true,
     "pretty": true,
     "removeComments": true,
+    "sourceMap": true,
     "strictNullChecks": true,
     "target": "es5"
   }
