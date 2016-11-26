@@ -1,12 +1,8 @@
 {
   "use": [
-    "postcss-cssnext",
     "cssnano"
   ],
   "input": "krypto.css",
   "output": "dist/krypto.css",
-  "map": "file",
-  "postcss-cssnext": {
-    "warnForDuplicates": false
-  }
+  "map": "file"
 }

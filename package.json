@@ -30,7 +30,6 @@
     "live-server": "^1.1.0",
     "parallelshell": "^2.0.0",
     "postcss-cli": "^2.6.0",
-    "postcss-cssnext": "^2.8.0",
     "replaceinfiles": "^1.1.4",
     "sw-precache": "^4.2.3",
     "tslint": "^4.0.2",
