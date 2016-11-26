@@ -4,7 +4,7 @@ const INPUTS = [
     "c",
     "d",
     "e",
-    "target"
+    "target",
 ]
 
 const DECK = [
@@ -32,7 +32,7 @@ const DECK = [
     22,
     23,
     24,
-    25
+    25,
 ]
 
 const shuffle = () => {
