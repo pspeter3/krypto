@@ -1,0 +1,40 @@
+{
+  "name": "krypto",
+  "description": "Simple Krypto Website",
+  "repository": "git@github.com:pspeter3/krypto.git",
+  "author": "Phips Peter <pspeter333@gmail.com>",
+  "private": true,
+  "scripts": {
+    "prebuild": "rm -rf dist *.js",
+    "build": "yarn build:sw",
+    "prebuild:appcache": "yarn build:css && yarn build:js",
+    "build:appcache": "appcache-manifest --prefix /krypto --output dist/krypto.mf dist/**/*",
+    "build:css": "postcss --config css.json",
+    "prebuild:hash": "yarn build:appcache && yarn build:html",
+    "build:hash": "hashmark --cwd dist --length 24 --rename '**/*.{css,js}.*' '{hash}{ext}' | replaceinfiles --source 'dist/**/*.{css,js,mf}'",
+    "postbuild:hash": "hashmark --cwd dist --length 24 --rename '**/*.{css,js}' '{hash}{ext}' | replaceinfiles --source 'dist/**/*.{html,mf}'",
+    "build:html": "appcache-manifest-fixer --manifest krypto.mf index.html | html-minifier --config-file html.json --output dist/index.html",
+    "build:js": "tsc && uglifyjs --compress --mangle --output dist/krypto.js --screw-ie8 --source-map dist/krypto.js.map krypto.js",
+    "prebuild:sw": "yarn build:hash",
+    "build:sw": "sw-precache --config sw.json",
+    "postbuild:sw": "uglifyjs --compress --mangle --output dist/sw.js --screw-ie8 service-worker.js",
+    "dev": "tsc && parallelshell 'tsc --watch' 'live-server .'",
+    "lint": "tslint --project tsconfig.json --type-check",
+    "test": "yarn lint && yarn build"
+  },
+  "devDependencies": {
+    "appcache-manifest": "^1.0.4",
+    "cssnano": "^3.8.1",
+    "hashmark": "^4.1.0",
+    "html-minifier": "^3.2.3",
+    "live-server": "^1.1.0",
+    "parallelshell": "^2.0.0",
+    "postcss-cli": "^2.6.0",
+    "postcss-cssnext": "^2.8.0",
+    "replaceinfiles": "^1.1.4",
+    "sw-precache": "^4.2.3",
+    "tslint": "^4.0.2",
+    "typescript": "^2.0.10",
+    "uglify-js": "^2.7.4"
+  }
+}
