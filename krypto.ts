@@ -40,8 +40,8 @@ const DECK = [
 ]
 
 const OPERATIONS: { [key: string]: Operation } = {
-    "+": (left, right) => left + right,
     "*": (left, right) => left * right,
+    "+": (left, right) => left + right,
     "-": (left, right) => left - right > 0 ? left - right : null,
     "/": (left, right) => left % right === 0 ? left / right : null,
 }
@@ -53,7 +53,7 @@ const INPUTS = [
     "d",
     "e",
     "target",
-].map(name => document.querySelector(`input[name="${name}"]`) as HTMLInputElement)
+].map((name) => document.querySelector(`input[name="${name}"]`) as HTMLInputElement)
 
 const shuffle = () => {
     for (let counter = DECK.length; counter; counter--) {
@@ -86,7 +86,7 @@ const traverse = (state: State): State[] => {
     const path = state.path
     for (let i = hand.length - 1; i >= 0; i--) {
         for (let j = i - 1; j >= 0; j--) {
-            let nextHand = hand.filter((_, index) => index !== i && index != j)
+            let nextHand = hand.filter((_, index) => index !== i && index !== j)
             let left = hand[i]
             let right = hand[j]
             if (right > left) {
@@ -97,7 +97,7 @@ const traverse = (state: State): State[] => {
                 if (result !== null) {
                     states.push({
                         hand: nextHand.concat([result]),
-                        path: path.concat([`${left}${op}${right}`])
+                        path: path.concat([`${left}${op}${right}`]),
                     })
                 }
             })
@@ -107,9 +107,9 @@ const traverse = (state: State): State[] => {
 }
 
 const solve = () => {
-    const hand = INPUTS.map(input => parseInt(input.value, 10))
+    const hand = INPUTS.map((input) => parseInt(input.value, 10))
     const target = hand.pop()
-    const states: State[] = [{ hand: hand, path: [] }]
+    const states: State[] = [{ hand, path: [] }]
     const graph: Graph = {}
     let current = states.shift()
     while (current !== undefined) {
