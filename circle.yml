@@ -16,3 +16,13 @@ test:
     - yarn test
   post:
     - cp -r dist/* "${CIRCLE_ARTIFACTS}"
+deployment:
+  prod:
+    branch: master
+    commands:
+      - git clone --branch gh-pages --single-branch "${CIRCLE_REPOSITORY_URL}" prod
+      - cp -r dist/* prod
+      - cd prod && git config --global user.name CircleCI
+      - cd prod && git add --all
+      - cd prod && git commit --allow-empty --message "${CIRCLE_BUILD_URL}"
+      - cd prod && git push --force origin gh-pages
