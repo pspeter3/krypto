@@ -1,11 +1,15 @@
-const INPUTS = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "target",
-]
+interface State {
+    hand: number[]
+    path: string[]
+}
+
+interface Operation {
+    (left: number, right: number): number | null
+}
+
+interface Graph {
+    [key: string]: Graph
+}
 
 const DECK = [
     1, 1, 1,
@@ -35,6 +39,22 @@ const DECK = [
     25,
 ]
 
+const OPERATIONS: { [key: string]: Operation } = {
+    "*": (left, right) => left * right,
+    "+": (left, right) => left + right,
+    "-": (left, right) => left - right > 0 ? left - right : null,
+    "/": (left, right) => left % right === 0 ? left / right : null,
+}
+
+const INPUTS = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "target",
+].map((name) => document.querySelector(`input[name="${name}"]`) as HTMLInputElement)
+
 const shuffle = () => {
     for (let counter = DECK.length; counter; counter--) {
         let swap = Math.floor(Math.random() * counter);
@@ -44,14 +64,69 @@ const shuffle = () => {
 
 const reset = (evt?: Event) => {
     shuffle()
-    INPUTS.forEach((name, index) => {
-        const input = document.querySelector(`input[name="${name}"]`) as HTMLInputElement
+    INPUTS.forEach((input, index) => {
         input.value = DECK[index].toString(10)
     })
     if (evt) {
         evt.preventDefault()
     }
+    solve()
 }
 
-document.querySelector("form").addEventListener("reset", reset)
+const annotate = (graph: Graph, node: string): Graph => {
+    if (!graph[node]) {
+        graph[node] = {}
+    }
+    return graph[node]
+}
+
+const traverse = (state: State): State[] => {
+    const states: State[] = []
+    const hand = state.hand
+    const path = state.path
+    for (let i = hand.length - 1; i >= 0; i--) {
+        for (let j = i - 1; j >= 0; j--) {
+            let nextHand = hand.filter((_, index) => index !== i && index !== j)
+            let left = hand[i]
+            let right = hand[j]
+            if (right > left) {
+                [left, right] = [right, left]
+            }
+            Object.keys(OPERATIONS).forEach((op) => {
+                const result = OPERATIONS[op](left, right)
+                if (result !== null) {
+                    states.push({
+                        hand: nextHand.concat([result]),
+                        path: path.concat([`${left}${op}${right}`]),
+                    })
+                }
+            })
+        }
+    }
+    return states
+}
+
+const solve = () => {
+    const hand = INPUTS.map((input) => parseInt(input.value, 10))
+    const target = hand.pop()
+    const states: State[] = [{ hand, path: [] }]
+    const graph: Graph = {}
+    let current = states.shift()
+    while (current !== undefined) {
+        if (current.hand.length === 1) {
+            if (current.hand[0] === target) {
+                current.path.reduce(annotate, graph)
+            }
+        } else {
+            states.push.apply(states, traverse(current))
+        }
+        current = states.shift()
+    }
+    document.querySelector("pre").textContent = JSON.stringify(graph, undefined, 4)
+        .replace(/[\{\}:,"]/g, "")
+}
+
+const form = document.querySelector("form")
+form.addEventListener("change", solve)
+form.addEventListener("reset", reset)
 reset()
