@@ -1,0 +1,10 @@
+# Artifacts
+dist
+*.js
+
+# Dependencies
+node_modules
+yarn-error.log
+
+# OSX
+.DS_Store
