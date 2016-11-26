@@ -16,7 +16,7 @@ test:
     - yarn test
   post:
     - cp -r dist/* "${CIRCLE_ARTIFACTS}"
-deploy:
+deployment:
   prod:
     branch: master
     commands:
