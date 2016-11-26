@@ -4,3 +4,72 @@
   margin: 0;
   padding: 0;
 }
+
+html {
+  font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+  line-height: 1.5;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+header, main, details {
+  padding: 0 0.5rem;
+}
+
+header {
+  display: flex;
+  border-bottom: 1px solid black;
+}
+
+header > h1 {
+  font-size: 2rem;
+}
+
+header > input[type="reset"] {
+  margin-left: auto;
+}
+
+input {
+  background: none;
+  border: none;
+  display: block;
+  font: inherit;
+  text-align: center;
+}
+
+input:focus, summary {
+  outline:none;
+}
+
+input[type="number"] {
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+
+input[type="number"]:focus {
+  border-bottom-color: steelblue;
+}
+
+input[type="number"]:invalid, input[type="number"]:out-of-range {
+  border-bottom-color: indianred;
+}
+
+input[name="target"] {
+  font-size: 4rem;
+  margin: 0 auto;
+}
+
+.inputs {
+  border: none;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.inputs > input {
+  font-size: 2rem;
+}
